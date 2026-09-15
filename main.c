@@ -19,3 +19,21 @@ const int TOTAL_BED_CAPACITY[NUM_WARDS]={20,10,10,05};
 
 int bedOccupancy[NUM_WARDS][MAX_TOTAL_BED_CAPACITY]={0};
 int specialtyCurrentQueues[NUM_WARDS]={0,0,0,0};
+
+void displayDoctorSpecialtiesData(){
+    printf("========Doctor Specialties Data========\n");
+    printf("%-12s%-25s%-20s%-20s%-15s\n",
+        "Specialty ID",
+        "Specialty Name",
+        "Base Consultation Fee",
+        "Consultation Time/Patient",
+        "Daily Patient Cap");
+    for(int i=0;i<4;i++){
+        printf("%-12d%-25s%-20.2lf%-20d%-15d\n",
+            SPECIALTY_IDS[i],
+            SPECIALTY_NAMES[i],
+            BASE_CONSULTATION_FEE[i],
+            CONSULTATION_TIME_PER_PATIENT[i],
+            DAILY_PATIENT_CAP[i]);
+    }
+}
