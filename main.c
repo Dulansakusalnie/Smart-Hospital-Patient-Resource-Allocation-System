@@ -28,12 +28,20 @@ void displayDoctorSpecialtiesData(){
         "Base Consultation Fee",
         "Consultation Time/Patient",
         "Daily Patient Cap");
-    for(int i=0;i<4;i++){
+    for(int i=0;i<NUM_SPECIALTIES;i++){
         printf("%-12d%-25s%-20.2lf%-20d%-15d\n",
             SPECIALTY_IDS[i],
             SPECIALTY_NAMES[i],
             BASE_CONSULTATION_FEE[i],
             CONSULTATION_TIME_PER_PATIENT[i],
             DAILY_PATIENT_CAP[i]);
+    }
+}
+
+void displayHospitalWardsData(){
+    printf("========Hospital Wards Data========\n");
+    printf("%-10s%-25s%-25s%-20s\n","Ward ID","Ward Name","Daily Bed Rate(LKR/Day)","Total Bed Capacity");
+    for(int i=0;i<NUM_WARDS;i++){
+        printf("%-10d%-25s%-25.2lf%-20d\n",WARD_IDS[i],WARD_NAMES[i],DAILY_BED_RATE[i],TOTAL_BED_CAPACITY[i]);
     }
 }
