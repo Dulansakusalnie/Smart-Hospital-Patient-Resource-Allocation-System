@@ -175,3 +175,14 @@ double calculateEmergencySurcharge(int triageLevel,double baseFee){
     }
     return baseFee*surchargeRate;
 }
+
+double calculateWardCost(int isAdmitted,int wardId,int daysAdmitted){
+    if(isAdmitted!=1){
+        return 0.0;
+    }
+    return daysAdmitted*DAILY_BED_RATE[wardId-1];
+}
+
+double calculateGrossTotal(double baseFee,double emergencySurcharge,double wardCost){
+    return baseFee+emergencySurcharge+wardCost;
+}
