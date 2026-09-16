@@ -54,10 +54,22 @@ void displayDoctorSpecialtiesData(){
 
 void displayHospitalWardsData(){
     printf("========Hospital Wards Data========\n");
-    printf("%-10s%-25s%-25s%-20s\n","Ward ID","Ward Name","Daily Bed Rate(LKR/Day)","Total Bed Capacity");
+    printf("%-10s%-25s%-25s%-20s%-20d\n","Ward ID","Ward Name","Daily Bed Rate(LKR/Day)","Total Bed Capacity","Available Beds");
     for(int i=0;i<NUM_WARDS;i++){
-        printf("%-10d%-25s%-25.2lf%-20d\n",WARD_IDS[i],WARD_NAMES[i],DAILY_BED_RATE[i],TOTAL_BED_CAPACITY[i]);
+        int occupiedBeds=getOccupiedBeds;
+        int availableBeds=TOTAL_BED_CAPACITY[i]-occupiedBeds;
+        printf("%-10d%-25s%-25.2lf%-20d%-20d\n",WARD_IDS[i],WARD_NAMES[i],DAILY_BED_RATE[i],TOTAL_BED_CAPACITY[i],availableBeds);
     }
+}
+
+int getOccupiedBeds(int wardIndex){
+    int bedCount=0;
+    for(int b=0;b<TOTAL_BED_CAPACITY[wardIndex];b++){
+        if(bedOccupancy[wardIndex][b]==1){
+            bedCount++;
+        }
+    }
+    return bedCount;
 }
 
 void patientRegistration(char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
@@ -103,17 +115,33 @@ void patientRegistration(char patientName[][30],int patientAge[],int triageLevel
         if(patientIsAdmitted[i]==1){
             displayHospitalWardsData();
             patientWardIds[i]=0;
-
+        
             printf("Enter ward ID(1 to 4): ");
             scanf("%d",&patientWardIds[i]);
+
+            int wardIndex=patientWardIds[i]-1;
         
-            while(patientWardIds[i]<1||patientWardIds[i]>4){
-                printf("Invalid ward ID.Please enter again.: ");
+            while(patientWardIds[i]<1||patientWardIds[i]>4||getOccupiedBeds(wardIndex)>=TOTAL_BED_CAPACITY){
+                if(patientWardIds[i]<1||patientWardIds[i]>4){
+                    printf("Invalid ward ID.Please enter again.: ");
+                }
+                else if(getOccupiedBeds(wardIndex)>=TOTAL_BED_CAPACITY){
+                    printf("Sorry %s ward is full.Please choose another ward",WARD_NAMES[wardIndex]);
+                }
                 scanf("%d",&patientWardIds[i]);
+                wardIndex=patientWardIds[i]-1;
+            }
+
+            for(int b=0;b<TOTAL_BED_CAPACITY;b++){
+                if(bedOccupancy[wardIndex][b]==0){
+                    bedOccupancy[wardIndex][b]=1;
+                    printf("Patient %s admitted to %s.Bed number %d assigned.\n",patientName[i],WARD_NAMES[wardIndex],b+1);
+                    break;
+                }
             }
 
             printf("Enter number of days admitted: ");
-            scanf("%d",patientDaysAdmitted[i]);
+            scanf("%d",&patientDaysAdmitted[i]);
 
         }
         else{
