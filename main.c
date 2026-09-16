@@ -18,7 +18,7 @@ const double DAILY_BED_RATE[NUM_WARDS]={3000.00,6000.00,12000.00,25000.00};
 const int TOTAL_BED_CAPACITY[NUM_WARDS]={20,10,10,05};
 
 int bedOccupancy[NUM_WARDS][MAX_TOTAL_BED_CAPACITY]={0};
-int specialtyCurrentQueues[NUM_WARDS]={0,0,0,0};
+int specialtyCurrentQueues[NUM_SPECIALTIES]={0,0,0,0};
 
 double waitTime[MAX_PATIENTS];
 double emergencySurcharge[MAX_PATIENTS];
@@ -158,3 +158,20 @@ void patientRegistration(char patientName[][30],int patientAge[],int triageLevel
     (*totalPatients)++;
 }
 
+double getBaseConsultationFee(int specialtyId){
+    return BASE_CONSULTATION_FEE[specialtyId-1];
+}
+
+
+double calculateEmergencySurcharge(int triageLevel,double baseFee){
+    double surchargeRate;
+    switch(triageLevel){
+        case 3: surchargeRate=0.50;
+        break;
+        case 2: surchargeRate=0.20;
+        break;
+        case 1: surchargeRate=0.00;
+        break;
+    }
+    return baseFee*surchargeRate;
+}
