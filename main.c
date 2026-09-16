@@ -199,3 +199,13 @@ double calculateAgeSubsidyDiscount(int age,double grossTotal){
 double calculateFinalPayable(double grossTotal,double discount){
     return grossTotal-discount;
 }
+
+void calculatePatientBill(int i,int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[]){
+    double baseFee=getBaseConsultationFee(patientSpecialtyIds[i]);
+    emergencySurcharge[i]=calculateEmergencySurcharge(triageLevel[i],baseFee);
+    totalWardCost[i]=calculateWardCost(patientIsAdmitted[i],patientWardIds[i],patientDaysAdmitted[i]);
+    grossTotal[i]=calculateGrossTotal(baseFee,emergencySurcharge[i],totalWardCost[i]);
+    ageSubsidyDiscount[i]=calculateAgeSubsidyDiscount(patientAge[i],grossTotal[i]);
+    finalPayableAmount[i]=calculateFinalPayable(grossTotal[i],ageSubsidyDiscount[i]);
+}
