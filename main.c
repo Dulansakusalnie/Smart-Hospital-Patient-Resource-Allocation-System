@@ -3,7 +3,7 @@
 #include <string.h>
 #define NUM_SPECIALTIES 4
 #define NUM_WARDS 4
-#define MAX_DAILY_PATIENT_CAP 30
+#define MAX_PATIENTS 100
 #define MAX_TOTAL_BED_CAPACITY 20
 
 const int SPECIALTY_IDS[NUM_SPECIALTIES]={1,2,3,4};
@@ -19,6 +19,20 @@ const int TOTAL_BED_CAPACITY[NUM_WARDS]={20,10,10,05};
 
 int bedOccupancy[NUM_WARDS][MAX_TOTAL_BED_CAPACITY]={0};
 int specialtyCurrentQueues[NUM_WARDS]={0,0,0,0};
+
+int main(){
+    char patientName[MAX_PATIENTS][30];
+    int patientAge[MAX_PATIENTS];
+    int triageLevel[MAX_PATIENTS];
+    int patientSpecialtyIds[MAX_PATIENTS];
+    int patientIsAdmitted[MAX_PATIENTS];
+    int patientWardIds[MAX_PATIENTS];
+    int patientDaysAdmitted[MAX_PATIENTS];
+
+    int totalPatients=0;
+
+    return 0;    
+}
 
 void displayDoctorSpecialtiesData(){
     printf("========Doctor Specialties Data========\n");
@@ -45,3 +59,4 @@ void displayHospitalWardsData(){
         printf("%-10d%-25s%-25.2lf%-20d\n",WARD_IDS[i],WARD_NAMES[i],DAILY_BED_RATE[i],TOTAL_BED_CAPACITY[i]);
     }
 }
+
