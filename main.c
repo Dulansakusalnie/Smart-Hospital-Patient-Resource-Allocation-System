@@ -60,3 +60,66 @@ void displayHospitalWardsData(){
     }
 }
 
+void patientRegistration(char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int *totalPatients[]){
+        
+        if(*totalPatients>= MAX_PATIENTS){
+            printf("Hospital has reached maximum capacity(%d\n)",MAX_PATIENTS);
+            return;
+        }
+
+        int i=*totalPatients;
+
+        printf("========Patient Registration========\n");
+        printf("Enter patient name: ");
+        scanf(" %[^\n]",patientName[i]);
+
+        printf("Enter patient age: ");
+        scanf("%d",&patientAge[i]);
+
+        printf("Enter Emergency/Triage Level(1=Normal,2=Urgent,3=Critical): ");
+        scanf("%d",&triageLevel[i]);
+       
+        while(triageLevel[i]<1||triageLevel[i]>3){
+            printf("Invalid triage level.");
+            printf("Enter Emergency/Triage Level(1=Normal,2=Urgent,3=Critical): ");
+            scanf("%d",&triageLevel[i]);
+        }
+
+        displayDoctorSpecialtiesData();
+        patientSpecialtyIds[i]=0;
+       
+        printf("Enter specialty ID(1 to 4): ");
+        scanf("%d",&patientSpecialtyIds[i]);
+        
+        while(patientSpecialtyIds[i]<1||patientSpecialtyIds[i]>4){
+            printf("Invalid specialty ID.Please enter again.: ");
+            scanf("%d",&patientSpecialtyIds[i]);
+        }
+
+        printf("Is admitted to ward?(1=Yes,0=No): ");
+        scanf("%d",&patientIsAdmitted[i]);
+
+        if(patientIsAdmitted[i]==1){
+            displayHospitalWardsData();
+            patientWardIds[i]=0;
+
+            printf("Enter ward ID(1 to 4): ");
+            scanf("%d",&patientWardIds[i]);
+        
+            while(patientWardIds[i]<1||patientWardIds[i]>4){
+                printf("Invalid ward ID.Please enter again.: ");
+                scanf("%d",&patientWardIds[i]);
+            }
+
+            printf("Enter number of days admitted: ");
+            scanf("%d",patientDaysAdmitted[i]);
+
+        }
+        else{
+            patientWardIds[i]=0;
+            patientDaysAdmitted[i]=0;
+        }            
+    (*totalPatients)++;
+}
+
