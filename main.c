@@ -20,6 +20,13 @@ const int TOTAL_BED_CAPACITY[NUM_WARDS]={20,10,10,05};
 int bedOccupancy[NUM_WARDS][MAX_TOTAL_BED_CAPACITY]={0};
 int specialtyCurrentQueues[NUM_WARDS]={0,0,0,0};
 
+double waitTime[MAX_PATIENTS];
+double emergencySurcharge[MAX_PATIENTS];
+double totalWardCost[MAX_PATIENTS];
+double grossTotal[MAX_PATIENTS];
+double ageSubsidyDiscount[MAX_PATIENTS];
+double finalPayableAmount[MAX_PATIENTS];
+
 int main(){
     char patientName[MAX_PATIENTS][30];
     int patientAge[MAX_PATIENTS];
