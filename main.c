@@ -186,3 +186,16 @@ double calculateWardCost(int isAdmitted,int wardId,int daysAdmitted){
 double calculateGrossTotal(double baseFee,double emergencySurcharge,double wardCost){
     return baseFee+emergencySurcharge+wardCost;
 }
+
+double calculateAgeSubsidyDiscount(int age,double grossTotal){
+    if(age<5||age>65){
+        return grossTotal*0.15;
+    }
+    else{
+        return 0.0;
+    }
+}
+
+double calculateFinalPayable(double grossTotal,double discount){
+    return grossTotal-discount;
+}
