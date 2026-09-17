@@ -116,6 +116,10 @@ void patientRegistration(char patientName[][30],int patientAge[],int triageLevel
             scanf("%d",&patientSpecialtyIds[i]);
         }
 
+        int spIndex=patientSpecialtyIds[i]-1;
+        waitTime[i]=calculateWaitingTime(patientSpecialtyIds[i],specialtyCurrentQueues[spIndex]);
+        incrementSpecialtyQueue(patientSpecialtyIds[i]);
+
         printf("Is admitted to ward?(1=Yes,0=No): ");
         scanf("%d",&patientIsAdmitted[i]);
 
@@ -198,6 +202,14 @@ double calculateAgeSubsidyDiscount(int age,double grossTotal){
 
 double calculateFinalPayable(double grossTotal,double discount){
     return grossTotal-discount;
+}
+
+double calculateWaitingTime(int specialtyId,int currentQueueCount){
+    return currentQueueCount*CONSULTATION_TIME_PER_PATIENT[specialtyId-1];
+}
+
+void incrementSpecialtyQueue(int specialtyId){
+    specialtyCurrentQueues[specialtyId-1]++;
 }
 
 void calculatePatientBill(int i,int patientAge[],int triageLevel[],int patientSpecialtyIds[],
