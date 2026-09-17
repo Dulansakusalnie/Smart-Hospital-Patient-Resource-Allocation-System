@@ -308,7 +308,7 @@ void sortPatientByPriority(int sortedIndices[],int totalPatients,int triageLevel
 void displayPatientByPriority(int sortedIndices[],int totalPatients,char patientName[][30],int patientAge[],
     int triageLevel[],int patientSpecialtyIds[],int patientIsAdmitted[],int patientWardIds[],
     int patientBedNumbers[]){
-        
+
     if(totalPatients==0){
         printf("Patients are not registered yet.\n");
         return;
@@ -334,3 +334,68 @@ void displayPatientByPriority(int sortedIndices[],int totalPatients,char patient
 
     }
 }
+
+void displayPerformanceReport(int totalPatients,int triageLevel[],char patientName[][30],int patientAge[],
+    double finalPayableAmount[],double ageSubsidyDiscount[],double grossTotal[]){
+
+    printf("========Hospital Performance Report========\n");
+    int normalCount=0;
+    int urgentCount=0;
+    int criticalCount=0;
+    for(int i=0;i<totalPatients;i++){
+        if(triageLevel[i]==1){
+            normalCount++;
+        }
+        else if(triageLevel[i]==2){
+            urgentCount++;
+        }
+        else if(triageLevel[i]==3){
+            criticalCount++;
+        }
+    }
+    printf("Patient Summary\n");
+    printf("Total patient registered:%d\n",totalPatients);
+    printf("Level 1(Normal)         :%d\n",normalCount);
+    printf("Level 2(Urgent)         :%d\n",urgentCount);
+    printf("Level 3(Critical)       :%d\n",criticalCount);
+
+    double totalRevenue=0.0;
+    double totalDiscount=0.0;
+    for(int i=0;i<totalPatients;i++){
+        totalRevenue+=finalPayableAmount[i];
+        totalDiscount+=ageSubsidyDiscount[i];
+    }
+    printf("Financial Summarry\n");
+    printf("Total revenue earned    :LKR %12.2lf\n",totalRevenue);
+    printf("Total discount granted  :LKR %12.2lf\n",totalDiscount);
+
+    printf("Bed Occupancy Per Ward\n");
+    printf("%-25s %-14s %-14s %-10s\n","Ward","Occupied beds","Total Capacity","Occupancy %");
+    for(int w=0;w<NUM_WARDS;w++){
+        int occupiedBeds=getOccupiedBeds(w);
+        int totalCapacity=TOTAL_BED_CAPACITY[w];
+        double percentage=0.0;
+        if(totalCapacity!=0){
+            percentage=((double)occupiedBeds/totalCapacity)*100;
+        }
+        printf("%-25s %-14d %-14d %6.2lf%%\n",WARD_NAMES[w],occupiedBeds,total capacity,percentage);
+    }
+
+    printf("Highest paying patient\n");
+    if(totalPatients==0){
+        printf("Patients are not registered yet.\n");
+    }
+    else{
+        int highestIndex=0;
+        for(int i=1;i<totalPatients;i++){
+            if(grossTotal[i]>grossTotal[highestIndex]){
+                highestIndex=i;
+            }
+        }
+        printf("Patient Name        :%s\n",patientName[highestIndex]);
+        printf("Patient Age         :%dYears\n",patientAge[highestIndex]);
+        printf("Gross Total         :%.2lf\n",grossTotal[highestIndex]);
+        printf("Final Payable Amount:%.2lf\n",finalPayableAmount[highestIndex]);
+    }
+
+    }
