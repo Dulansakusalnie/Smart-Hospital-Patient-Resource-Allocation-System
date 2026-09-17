@@ -37,6 +37,8 @@ int main(){
     int patientDaysAdmitted[MAX_PATIENTS];
     int patientBedNumbers[MAX_PATIENTS];
 
+    int sortedIndices[MAX_PATIENTS];
+
     int totalPatients=0;
 
     return 0;    
@@ -242,7 +244,7 @@ void printPatientBill(int i,char patientName[][30],int patientAge[],int triageLe
     printf("\t\tSMART HOSPITAL ADMISSION & BILL\n");
     printf("--------------------------------------------------------\n");
     printf("Patient ID              :PAT-%04d\n",i+1);
-    printf("PatientName             :%s\n",patientName[i]);
+    printf("Patient Name             :%s\n",patientName[i]);
     printf("Age                     :%d Years",patientAge[i]);
     if(patientAge[i]<5||patientAge[i]>65)
         printf("(15%% Subsidy Eligible)");
@@ -273,4 +275,62 @@ void printPatientBill(int i,char patientName[][30],int patientAge[],int triageLe
     }
     printf("========================================================\n");
 
+}
+
+void sortPatientByPriority(int sortedIndices[],int totalPatients,int triageLevel[]){
+    for(int i=0;i<totalPatients;i++){
+        sortedIndices[i]=i;
+    }
+    for(int pass=0;pass<totalPatients-1;pass++){
+        int swapped=0;
+
+        for(int j=0;j<totalPatients-1-pass;j++){
+            int a=sortedIndices[j];
+            int b=sortedIndices[j+1];
+            int shouldSwap=0;
+            if(triageLevel[b]>triageLevel[a]){
+                shouldSwap=1;
+            }
+            else if(triageLevel[b]==triageLevel[a]&&b<a){
+                shouldSwap=1;
+            }
+            if(shouldSwap){
+                int temp=sortedIndices[j];
+                sortedIndices[j]=sortedIndices[j+1];
+                sortedIndices[j+1]=temp;
+                swapped=1;
+            }
+        }
+        if(!swapped) break;
+    }
+}
+
+void displayPatientByPriority(int sortedIndices[],int totalPatients,char patientName[][30],int patientAge[],
+    int triageLevel[],int patientSpecialtyIds[],int patientIsAdmitted[],int patientWardIds[],
+    int patientBedNumbers[]){
+        
+    if(totalPatients==0){
+        printf("Patients are not registered yet.\n");
+        return;
+    }
+    sortPatientByPriority(sortedIndices,totalPatients,triageLevel);
+    const char *urgencyText[]={"Normal","Urgent","Critical"};
+
+    printf("========Patients in priority order========\n");
+    printf("%-12s %-22s %-5s %-15s %-22s %-18s %-5s\n","Patient ID","Patient Name","Age","Urgency Level","Specialty","Ward","Bed");
+    for(int k=0;k<totalPatients;k++){
+        int i=sortedIndices[k];
+        int spIndex=patientSpecialtyIds[i]-1;
+
+        printf("PAT-%04d %-20s %-5d Level %d %-10s %-22s",i+1,patientName[i],patientAge[i],triageLevel[i],urgencyText[triageLevel[i]-1],SPECIALTY_NAMES[spIndex]);
+
+        if(patientIsAdmitted[i]==1){
+            int wIndex=patientWardIds[i]-1;
+            printf("%-18s %-5d\n",WARD_NAMES[wIndex],patientBedNumbers[i]);
+        }
+        else{
+            printf("%-18s %-5s\n","OPD","-");
+        }
+
+    }
 }
