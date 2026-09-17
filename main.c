@@ -230,7 +230,8 @@ void calculatePatientBill(int i,int patientAge[],int triageLevel[],int patientSp
     finalPayableAmount[i]=calculateFinalPayable(grossTotal[i],ageSubsidyDiscount[i]);
 }
 
-void printPatientBill(int i,char){
+void printPatientBill(int i,char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int patientBedNumbers[]){
     int spIndex=patientSpecialtyIds[i]-1;
     const char *UrgencyText[]={"Normal","Urgent","Critical"};
 
