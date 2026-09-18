@@ -27,6 +27,40 @@ double grossTotal[MAX_PATIENTS];
 double ageSubsidyDiscount[MAX_PATIENTS];
 double finalPayableAmount[MAX_PATIENTS];
 
+//Function prototypes
+void displayDoctorSpecialtiesData();
+void displayHospitalWardsData();
+int getOccupiedBeds(int wardIndex);
+void patientRegistration(char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int *totalPatients[],
+    int patientBedNumbers[]);
+double getBaseConsultationFee(int specialtyId);
+double calculateEmergencySurcharge(int triageLevel,double baseFee);
+double getEmergencySurchargeRate(int triageLevel);
+double calculateWardCost(int isAdmitted,int wardId,int daysAdmitted);
+double calculateGrossTotal(double baseFee,double emergencySurcharge,double wardCost);
+double calculateAgeSubsidyDiscount(int age,double grossTotal);
+double getAgeSubsidyRate(int age);
+double calculateFinalPayable(double grossTotal,double discount);
+double calculateWaitingTime(int specialtyId,int currentQueueCount);
+void incrementSpecialtyQueue(int specialtyId);
+void calculatePatientBill(int i,int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[]);
+void printPatientBill(int i,char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
+    int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int patientBedNumbers[]);
+void sortPatientByPriority(int sortedIndices[],int totalPatients,int triageLevel[]);
+void displayPatientByPriority(int sortedIndices[],int totalPatients,char patientName[][30],int patientAge[],
+    int triageLevel[],int patientSpecialtyIds[],int patientIsAdmitted[],int patientWardIds[],
+    int patientBedNumbers[]);
+void displayPerformanceReport(int totalPatients,int triageLevel[],char patientName[][30],int patientAge[],
+    double finalPayableAmount[],double ageSubsidyDiscount[],double grossTotal[]);
+void saveBedsStatus();
+void loadBedsStatus();
+void appendPatientRecords(int i,char patientName[][30],int patientAge[],int triageLevel[],
+    int patientSpecialtyIds[],int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],
+    int patientBedNumbers[]);
+
+
 int main(){
     char patientName[MAX_PATIENTS][30];
     int patientAge[MAX_PATIENTS];
@@ -399,26 +433,26 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
     }
     }
 
-    void saveBedsStatus(){
-        FILE *fp=fopen("beds_status.txt","w");
-        if(fp==NULL){
-            printf("Can not open beds_status.txt file for writing.\n");
-            return;
-        }
-        fprintf(fp,"Total_wards=%d\n",NUM_WARDS);
-        for(int w=0;w<NUM_WARDS;w++){
-            fprintf(fp,"Capacity=%d\n",TOTAL_BED_CAPACITY[w]);
-            fprintf(fp,"Beds=");
-            for(int b=0;b<TOTAL_BED_CAPACITY[w];b++){
-                fprintf(fp,"%d",bedOccupancy[w][b]);
-                if(b!=TOTAL_BED_CAPACITY[w]-1){
-                    fprintf(fp," ");
-                }
-            }
-            fprintf(fp,"\n");
-        }
-        fclose(fp);
+void saveBedsStatus(){
+    FILE *fp=fopen("beds_status.txt","w");
+    if(fp==NULL){
+        printf("Can not open beds_status.txt file for writing.\n");
+        return;
     }
+    fprintf(fp,"Total_wards=%d\n",NUM_WARDS);
+    for(int w=0;w<NUM_WARDS;w++){
+        fprintf(fp,"Capacity=%d\n",TOTAL_BED_CAPACITY[w]);
+        fprintf(fp,"Beds=");
+        for(int b=0;b<TOTAL_BED_CAPACITY[w];b++){
+            fprintf(fp,"%d",bedOccupancy[w][b]);
+            if(b!=TOTAL_BED_CAPACITY[w]-1){
+                fprintf(fp," ");
+            }
+        }
+        fprintf(fp,"\n");
+    }
+    fclose(fp);
+}
 
 void loadBedsStatus(){
     FILE *fp=fopen("beds_status.txt","r");
