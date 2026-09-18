@@ -74,6 +74,89 @@ int main(){
     int sortedIndices[MAX_PATIENTS];
 
     int totalPatients=0;
+    int choice;
+
+    loadBedsStatus();
+
+    do{
+        printf("===========================================\n");
+        printf("\t\tSMART HOSPITAL MANAGEMENT SYSTEM\n");
+        printf("===========================================\n");
+        printf("1.View Doctor Specialties\n");
+        printf("2.View Hospital Wards\n");
+        printf("3.Register New Patient\n");
+        printf("4.Print Patient Bill\n");
+        printf("5.View Patients By Priority\n");
+        printf("6.View Performance Report\n");
+        printf("7.Save Bed Status\n");
+        printf("8.Load Bed Status\n");
+        printf("9.Exit\n");
+        printf("===========================================\n");
+        printf("Enter your choice: ");
+        scanf("%d",&choice);
+
+        switch(choice){
+            case 1:
+                displayDoctorSpecialtiesData();
+                break;
+            case 2:
+                displayHospitalWardsData();
+                break;
+            case 3:
+                patientRegistration(patientName,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
+                    patientWardIds,patientDaysAdmitted,&totalPatients,patientBedNumbers);
+                if(totalPatients>0){
+                    int i=totalPatients-1;
+                    calculatePatientBill(i,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
+                    patientWardIds,patientDaysAdmitted);
+                    printPatientBill(i,patientName,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
+                    patientWardIds,patientDaysAdmitted,patientBedNumbers);
+                    appendPatientRecords(i,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
+                    patientWardIds,patientDaysAdmitted);
+                    print("Patient registered successfully,\n");
+                }
+                break;
+            case 4:
+                if(totalPatients==0){
+                    printf("Patients are not registered yet.\n");
+                }
+                else{
+                    int patientId;
+                    printf("Enter patient ID number(1 to %d): ",totalPatients);
+                    scanf("%d",&patientId);
+                    if(patientId>=1&&patientId<=totalPatients){
+                        printPatientBill(patientId-1,patientName,patientAge,triageLevel,patientSpecialtyIds,
+                            patientIsAdmitted,patientWardIds,patientDaysAdmitted,patientBedNumbers);
+                    }
+                    else{
+                        printf("Invalid patient ID\n");
+                    }
+                }
+                break;
+            case 5:
+                displayPatientByPriority(sortedIndices,totalPatients,patientName,patientAge,triageLevel,
+                    patientSpecialtyIds,patientIsAdmitted,patientWardIds,patientBedNumbers);
+                break;
+            case 6:
+                displayPerformanceReport(totalPatients,triageLevel,patientName,patientAge,finalPayableAmount,
+                    ageSubsidyDiscount,grossTotal);
+                break;
+            case 7:
+                saveBedsStatus();
+                printf("Bed status saved to beds_status.txt\n");
+                break;
+            case 8:
+                loadBedsStatus();
+                printf("Bed status loaded from bed_status.txt\n");
+                break;
+            case 9:
+                saveBedsStatus();
+                break;
+            default:
+                printf("Invalid choice.\n");
+            
+        }
+    }while(choice!=9);
 
     return 0;    
 }
