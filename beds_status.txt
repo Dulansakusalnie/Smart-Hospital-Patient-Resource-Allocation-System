@@ -1,9 +1,0 @@
-Total_wards=4
-Capacity=20
-Beds=0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-Capacity=10
-Beds=1 0 0 0 0 0 0 0 0 0
-Capacity=10
-Beds=0 0 0 0 0 0 0 0 0 0
-Capacity=5
-Beds=0 0 0 0 0
