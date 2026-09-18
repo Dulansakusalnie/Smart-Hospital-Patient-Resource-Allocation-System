@@ -397,5 +397,25 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
         printf("Gross Total         :%.2lf\n",grossTotal[highestIndex]);
         printf("Final Payable Amount:%.2lf\n",finalPayableAmount[highestIndex]);
     }
+    }
 
+    void saveBedsStatus(){
+        FILE *fp=fopen("beds_status.txt","w");
+        if(fp==NULL){
+            fprintf("Can not open beds_status.txt file for writing.\n");
+            return;
+        }
+        fprintf(fp,"Total_wards=%d\n",NUM_WARDS);
+        for(int w=0;w<NUM_WARDS;w++){
+            fprintf(fp,"Capacity=%d\n",TOTAL_BED_CAPACITY[w]);
+            fprintf(fp,"Beds=");
+            for(int b=0;b<TOTAL_BED_CAPACITY[w];b++){
+                fprintf(fp,"%d",bedOccupancy[w][b]);
+                if(b!=TOTAL_BED_CAPACITY[w]-1){
+                    fprintf(fp," ");
+                }
+            }
+            fprintf(fp,"\n");
+        }
+        fclose(fp);
     }
