@@ -111,9 +111,9 @@ int main(){
                     patientWardIds,patientDaysAdmitted);
                     printPatientBill(i,patientName,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
                     patientWardIds,patientDaysAdmitted,patientBedNumbers);
-                    appendPatientRecords(i,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
-                    patientWardIds,patientDaysAdmitted);
-                    print("Patient registered successfully,\n");
+                    appendPatientRecords(i,patientName,patientAge,triageLevel,patientSpecialtyIds,patientIsAdmitted,
+                    patientWardIds,patientDaysAdmitted,patientBedNumbers);
+                    printf("Patient registered successfully,\n");
                 }
                 break;
             case 4:
@@ -183,7 +183,7 @@ void displayHospitalWardsData(){
     printf("========Hospital Wards Data========\n");
     printf("%-10s%-25s%-25s%-20s%-20d\n","Ward ID","Ward Name","Daily Bed Rate(LKR/Day)","Total Bed Capacity","Available Beds");
     for(int i=0;i<NUM_WARDS;i++){
-        int occupiedBeds=getOccupiedBeds;
+        int occupiedBeds=getOccupiedBeds(i);
         int availableBeds=TOTAL_BED_CAPACITY[i]-occupiedBeds;
         printf("%-10d%-25s%-25.2lf%-20d%-20d\n",WARD_IDS[i],WARD_NAMES[i],DAILY_BED_RATE[i],TOTAL_BED_CAPACITY[i],availableBeds);
     }
@@ -201,7 +201,7 @@ int getOccupiedBeds(int wardIndex){
 
 void patientRegistration(char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
     int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int *totalPatients[],
-    int patientBedNumbers[i]){
+    int patientBedNumbers[]){
         
         if(*totalPatients>= MAX_PATIENTS){
             printf("Hospital has reached maximum capacity(%d\n)",MAX_PATIENTS);
@@ -352,7 +352,7 @@ void calculatePatientBill(int i,int patientAge[],int triageLevel[],int patientSp
 void printPatientBill(int i,char patientName[][30],int patientAge[],int triageLevel[],int patientSpecialtyIds[],
     int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],int patientBedNumbers[]){
     int spIndex=patientSpecialtyIds[i]-1;
-    const char *UrgencyText[]={"Normal","Urgent","Critical"};
+    const char *urgencyText[]={"Normal","Urgent","Critical"};
 
     double surchargeRate=getEmergencySurchargeRate(triageLevel[i]);
     double subsidyRate=getAgeSubsidyRate(patientAge[i]);
@@ -495,7 +495,7 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
         if(totalCapacity!=0){
             percentage=((double)occupiedBeds/totalCapacity)*100;
         }
-        printf("%-25s %-14d %-14d %6.2lf%%\n",WARD_NAMES[w],occupiedBeds,total capacity,percentage);
+        printf("%-25s %-14d %-14d %6.2lf%%\n",WARD_NAMES[w],occupiedBeds,totalCapacity,percentage);
     }
 
     printf("Highest paying patient\n");
@@ -514,7 +514,7 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
         printf("Gross Total         :%.2lf\n",grossTotal[highestIndex]);
         printf("Final Payable Amount:%.2lf\n",finalPayableAmount[highestIndex]);
     }
-    }
+}
 
 void saveBedsStatus(){
     FILE *fp=fopen("beds_status.txt","w");
