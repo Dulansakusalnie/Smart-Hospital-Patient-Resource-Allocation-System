@@ -439,3 +439,45 @@ void loadBedsStatus(){
     fclose(fp);
 }
 
+void appendPatientRecords(int i,char patientName[][30],int patientAge[],int triageLevel[],
+    int patientSpecialtyIds[],int patientIsAdmitted[],int patientWardIds[],int patientDaysAdmitted[],
+    int patientBedNumbers[]){
+
+    FILE *fp=fopen("patient_records.txt","a");
+    if(fp==NULL){
+        printf("Can not open patients_records.txt for appending.\n");
+        return;
+    }
+    const char *urgencyText[]={"Normal","Urgent","Critical"};
+    int spIndex=patientSpecialtyIds[i]-1;
+    
+    fprintf(fp,"Patient ID               :PAT-%04d\n",i+1);
+    fprintf(fp,"Patient Name             :%s\n",patientName[i]);
+    fprintf(fp,"Age                      :%d Years\n",patientAge[i]);
+    fprintf(fp,"Urgency Level            :Level %d (%s)\n",triageLevel[i],urgencyText[triageLevel[i]-1]);
+    fprintf(fp,"Specialty                :%s\n",SPECIALTY_NAMES[spIndex]);
+    if(patientIsAdmitted[i]==1){
+        int wIndex=patientWardIds[i]-1;
+        fprintf(fp,"Assigned Ward            :%s(Bed #%02d)\n",WARD_NAMES[wIndex],patientBedNumbers[i]);
+        fprintf(fp,"Days admitted            :%d\n",patientDaysAdmitted[i]);
+    }
+    else{
+        fprintf(fp,"Assigned Ward            :OPD(Outpatient)\n");
+        fprintf(fp,"Days admitted            :0\n");
+    }
+    
+    fprintf(fp,"Base Consultation Fee   :LKR %10.2lf\n",BASE_CONSULTATION_FEE[spIndex]);
+    fprintf(fp,"Emergency Surcharge     :LKR %10.2lf\n",emergencySurcharge[i]);;
+    fprintf(fp,"Ward Stay Cost          :LKR %10.2f\n",totalWardCost[i]);
+    fprintf(fp,"Gross Total Bill        :LKR %10.2lf\n",grossTotal[i]);
+    fprintf(fp,"Age Subsidy Discount    :LKR %10.2lf\n",-ageSubsidyDiscount[i]);
+    fprintf(fp,"Final Payable Amount    :LKR %10.2lf\n",finalPayableAmount[i]);
+    if(waitTime[i]==0.0){
+        fprintf(fp,"Estimated Waiting Time  :0.00 mins(Immediate Attention)\n");
+    }
+    else{
+        fprintf(fp,"Estimated Waiting Time  :%.2f\n",waitTime[i]);
+    }
+    fclose(fp);
+    }
+
