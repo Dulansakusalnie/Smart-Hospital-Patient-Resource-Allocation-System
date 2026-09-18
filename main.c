@@ -402,7 +402,7 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
     void saveBedsStatus(){
         FILE *fp=fopen("beds_status.txt","w");
         if(fp==NULL){
-            fprintf("Can not open beds_status.txt file for writing.\n");
+            printf("Can not open beds_status.txt file for writing.\n");
             return;
         }
         fprintf(fp,"Total_wards=%d\n",NUM_WARDS);
@@ -419,3 +419,23 @@ void displayPerformanceReport(int totalPatients,int triageLevel[],char patientNa
         }
         fclose(fp);
     }
+
+void loadBedsStatus(){
+    FILE *fp=fopen("beds_status.txt","r");
+    if(fp==NULL){
+        printf("Saved bed status can not found.\n");
+        return;
+    }
+    int totalWards;
+    fscanf(fp,"Total_Wards=%d",&totalWards);
+    for(int w=0;w<totalWards;w++){
+        int totalCapacity;
+        fscanf(fp,"Capacity=%d",&totalCapacity);
+        fscanf(fp,"Beds=");
+        for(int b=0;b<totalCapacity;b++){
+            fscanf(fp,"%d",&bedOccupancy[w][b]);
+        }
+    }
+    fclose(fp);
+}
+
